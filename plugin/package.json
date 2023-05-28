@@ -1,0 +1,55 @@
+{
+  "name": "vite-plugin-remix",
+  "version": "0.1.8",
+  "type": "module",
+  "description": "Support RemixJS Framework in ViteServer",
+  "keywords": [
+    "vite",
+    "remix",
+    "remix-run"
+  ],
+  "files": [
+    "dist",
+    "client.d.ts",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "Willyams Yujra <yracnet@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yracnet/vite-plugin-remix"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    }
+  },
+  "homepage": "https://github.com/yracnet/vite-plugin-remix",
+  "bugs": "https://github.com/yracnet/vite-plugin-remix/issues",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "fast-glob": "^3.2.12",
+    "path": "^0.12.7"
+  },
+  "peerDependencies": {
+    "vite": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.15",
+    "@types/polka": "^0.5.4",
+    "express": "^4.18.2",
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.0.0"
+  }
+}
