@@ -1,4 +1,5 @@
 import { LoadContext } from "./assertPluginHandler";
+import { getMetafile } from "./getMetafile.ts";
 import { slashJoinAbsolute, slashJoinName } from "./util.ts";
 
 import { flatRoutes } from "@remix-run/dev/dist/config/flat-routes.js";
@@ -11,10 +12,17 @@ export type ConfigRoute = {
   file: string;
   module: string;
   index?: boolean;
+  hasAction?: boolean;
+  hasLoader?: boolean;
   caseSensitive?: boolean;
+  hasCatchBoundary?: boolean;
+  hasErrorBoundary?: boolean;
 };
 
-export const getRemixRouteList = (context: LoadContext): ConfigRoute[] => {
+export const getRemixRouteList = (
+  context: LoadContext,
+  name?: string
+): ConfigRoute[] => {
   const {
     config,
     viteConfig: { base },
@@ -35,7 +43,7 @@ export const getRemixRouteList = (context: LoadContext): ConfigRoute[] => {
     caseSensitive: undefined,
   };
 
-  const routeList: ConfigRoute[] = Object.values(conventionalRoutes).map(
+  let routeList: ConfigRoute[] = Object.values(conventionalRoutes).map(
     (it: any) => {
       return {
         id: it.id,
@@ -48,5 +56,15 @@ export const getRemixRouteList = (context: LoadContext): ConfigRoute[] => {
       };
     }
   );
-  return [ROOT, ...routeList];
+  routeList = [ROOT, ...routeList].map((it) => {
+    let exports = getMetafile("." + it.file);
+    it.caseSensitive = !!exports.caseSensitive;
+    it.hasAction = !!exports.action;
+    it.hasLoader = !!exports.loader;
+    it.hasCatchBoundary = !!exports.CatchBoundary;
+    it.hasErrorBoundary = !!exports.ErrorBoundary;
+    return it;
+  });
+  console.log("getRemixRouteList:", name);
+  return routeList;
 };

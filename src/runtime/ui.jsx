@@ -1,6 +1,6 @@
 export const LiveReload = () => {
   let __html = `
-  import { injectIntoGlobalHook } from "${import.meta.env.VITE_URL_REFRESH}";
+  import { injectIntoGlobalHook } from "VITE_URL_REFRESH";
   injectIntoGlobalHook(window);
   window.$RefreshReg$ = () => {};
   window.$RefreshSig$ = () => (type) => type;
@@ -8,7 +8,7 @@ export const LiveReload = () => {
   return (
     <>
       <script type="module" dangerouslySetInnerHTML={{ __html }}></script>
-      <script type="module" src={import.meta.env.VITE_URL_CLIENT}></script>
+      <script type="module" src="VITE_URL_CLIENT"></script>
     </>
   );
 };

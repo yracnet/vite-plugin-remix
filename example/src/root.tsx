@@ -30,11 +30,6 @@ const Root = () => {
 };
 export default Root;
 
-/*
-
-
-*/
-
 export function CatchBoundary() {
   const caught = useCatch();
   return (

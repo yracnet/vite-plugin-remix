@@ -9,7 +9,7 @@ export const createServerBuildSource: LoadFunction = (context) => {
     viteConfig: { base },
   } = context;
 
-  const routeList = getRemixRouteList(context);
+  const routeList = getRemixRouteList(context, "ServerBuild");
 
   const manifestRoutes = routeList.reduce((map: any, it) => {
     let exports = getMetafile("." + it.file);
@@ -27,12 +27,8 @@ export const createServerBuildSource: LoadFunction = (context) => {
     };
     return map;
   }, {});
-
+  console.log("Reload ServerBuild");
   return `  
-
-  export const FakeReload = ()=><div>Reload!</div>;
-
-
 ${routeList
   .map((it, ix) => `import * as route${ix} from "${it.file}"`)
   .join(";\n")}

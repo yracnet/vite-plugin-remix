@@ -15,7 +15,7 @@ export const loader = () => {
 const ContactPage = () => {
   return (
     <div>
-      <h2>CONTACT</h2>
+      <h2>CONTACT12</h2>
       <ul>
         <li>
           <Link to="./">Index</Link>

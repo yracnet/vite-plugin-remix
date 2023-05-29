@@ -19,14 +19,6 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
     },
     configResolved: async (config) => {
       viteConfig = config;
-      process.env.VITE_URL_REFRESH = slashJoinAbsolute(
-        config.base,
-        "@react-refresh"
-      );
-      process.env.VITE_URL_CLIENT = slashJoinAbsolute(
-        config.base,
-        "@vite/client"
-      );
     },
     resolveId: (id) => {
       return resolveId[id];
@@ -38,7 +30,17 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
         viteConfig,
       });
     },
-    configureServer: (devServer) => {
+    configureServer: async (devServer) => {
+      devServer.ws.on("vite:invalidate", async (data) => {
+        console.log("INVALID>>>: ", data);
+        let module = devServer.moduleGraph.getModuleById(
+          "@remix-vite/manifestInject.jsx"
+        );
+        if (module) {
+          devServer.moduleGraph.invalidateModule(module);
+          devServer.reloadModule(module);
+        }
+      });
       return async () => {
         devServer.middlewares.use(async (req, res, next) => {
           try {

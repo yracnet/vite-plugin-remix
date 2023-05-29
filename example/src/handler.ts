@@ -29,3 +29,5 @@ export const run = (args: any = {}) => {
     console.log(`http://${hostname}:${port}`);
   });
 };
+
+console.log("Reload Server!!!");

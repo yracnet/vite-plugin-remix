@@ -4,7 +4,7 @@ import { getRemixRouteList } from "./pages.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 const getManifestRoutes = (context: LoadContext) => {
-  const routeList = getRemixRouteList(context).map((it) => {
+  const routeList = getRemixRouteList(context, "ManifestInject").map((it) => {
     let exports = getMetafile("." + it.file);
     return {
       id: it.id,
@@ -46,8 +46,9 @@ export const createManifestJson: LoadFunction = (context) => {
 
 export const createManifestInjectSource: LoadFunction = (context) => {
   const manifest = createManifestJson(context);
+  console.log("Reload ManifestInject");
   return `
-  
+
   export const FakeReload = ()=><div>Reload!</div>;
 
   window.__remixManifest = ${manifest};

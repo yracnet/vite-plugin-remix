@@ -29,15 +29,15 @@ export const getMetafile = (filePath: string) => {
       },
       logLevel: "silent",
       bundle: true,
-      outfile: filePath,
+      outfile: "out.js",
       external: ["*"],
     });
-    const exports = result.metafile.outputs[filePath]?.exports || [];
-
+    const exports = result.metafile.outputs["out.js"]?.exports || [];
     cache.exports = exports.reduce((map: any, name) => {
       map[name] = true;
       return map;
     }, {});
+    // console.log("getMetafile:", filePath, cache.exports);
     return cache.exports;
   } catch (error) {
     console.log("Error on getMetafile:", error, filePath);
