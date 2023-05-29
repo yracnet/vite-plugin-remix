@@ -1,6 +1,6 @@
 import { LoadFunction } from "./assertPluginHandler";
 import { getMetafile } from "./getMetafile";
-import { getRemixRouteList } from "./pages.ts";
+import { getConfigRouteList } from "./pages.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 export const createServerBuildSource: LoadFunction = (context) => {
@@ -9,7 +9,7 @@ export const createServerBuildSource: LoadFunction = (context) => {
     viteConfig: { base },
   } = context;
 
-  const routeList = getRemixRouteList(context, "ServerBuild");
+  const routeList = getConfigRouteList(context, "ServerBuild");
 
   const manifestRoutes = routeList.reduce((map: any, it) => {
     let exports = getMetafile("." + it.file);

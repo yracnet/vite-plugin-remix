@@ -1,10 +1,10 @@
 import { LoadContext, LoadFunction } from "./assertPluginHandler.ts";
 import { getMetafile } from "./getMetafile.ts";
-import { getRemixRouteList } from "./pages.ts";
+import { getConfigRouteList } from "./pages.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 const getManifestRoutes = (context: LoadContext) => {
-  const routeList = getRemixRouteList(context, "ManifestInject").map((it) => {
+  const routeList = getConfigRouteList(context, "ManifestInject").map((it) => {
     let exports = getMetafile("." + it.file);
     return {
       id: it.id,

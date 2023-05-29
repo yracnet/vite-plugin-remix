@@ -1,8 +1,16 @@
 import fs from "fs";
 import path from "path";
 
-export const getSourceCode = (file: string): string =>
+export const readSourceCode = (file: string): string =>
   fs.readFileSync(file, { encoding: "utf8" });
+
+export const writeSourceCode = (file: string, data: any) => {
+  try {
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.log("Error: Write File:", file);
+  }
+};
 
 export const slash = (str = "") => {
   return str.replace(/\\/g, "/");

@@ -1,9 +1,18 @@
-import { FutureConfig } from "@remix-run/server-runtime/dist/entry";
 import { ResolvedConfig } from "vite";
 import { createManifestInjectSource } from "./createManifestSource";
 import { createServerBuildSource } from "./createServerBuildSource";
 import { attachRuntimeSource } from "./attachRuntimeSource";
 import { slashFindEntry } from "./util";
+
+export interface FutureConfig {
+  unstable_dev: boolean;
+  unstable_postcss: boolean;
+  unstable_tailwind: boolean;
+  v2_errorBoundary: boolean;
+  v2_meta: boolean;
+  v2_normalizeFormMethod: boolean;
+  v2_routeConvention: boolean;
+}
 
 export type PluginConfig = {
   handler: string;

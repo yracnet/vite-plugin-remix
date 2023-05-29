@@ -2,7 +2,7 @@
 // import.meta.env.MODE !== "development"
 
 import { LoadFunction } from "./assertPluginHandler";
-import { getSourceCode, slashJoin, slashJoinAbsolute } from "./util";
+import { readSourceCode, slashJoin, slashJoinAbsolute } from "./util";
 
 export const attachRuntimeSource: LoadFunction = (context) => {
   const {
@@ -10,13 +10,8 @@ export const attachRuntimeSource: LoadFunction = (context) => {
     viteConfig: { base },
   } = context;
   const filePath = slashJoin(dirname, "/runtime/ui.jsx");
-  const code = getSourceCode(filePath)
+  const code = readSourceCode(filePath)
     .replace("VITE_URL_REFRESH", slashJoinAbsolute(base, "@react-refresh"))
     .replace("VITE_URL_CLIENT", slashJoinAbsolute(base, "@vite/client"));
-  return `
-/**
- * Source: ${filePath}
- */
-${code}
-  `;
+  return code;
 };

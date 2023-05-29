@@ -3,6 +3,11 @@ import react from "@vitejs/plugin-react-swc";
 import { remixPlugin } from "../src/index";
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      external: ["react", "react-dom", "@remix-run/react"],
+    },
+  },
   plugins: [
     remixPlugin({
       appDirectory: "src",

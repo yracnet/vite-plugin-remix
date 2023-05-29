@@ -1,5 +1,6 @@
 import { LinksFunction } from "@remix-run/server-runtime";
-import { LiveReload, Welcome } from "@remix-vite/ui";
+//import { LiveReload, Welcome } from "@remix-vite/ui";
+import { LiveReload, Welcome } from "./ui";
 import {
   useCatch,
   Links,
