@@ -2,8 +2,7 @@
 import { Plugin, ResolvedConfig } from "vite";
 import { RouteMap, UserConfig, processConfigPlugin } from "./pluginHandler";
 import { getRouteMap } from "./plugin/remixPages";
-import { assertModuleId, slashRelativeAbsolute } from "./plugin/util";
-import fs from "fs";
+import { slashRelativeAbsolute } from "./plugin/util";
 
 export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
   const { resolveId, loadId, config } = processConfigPlugin(

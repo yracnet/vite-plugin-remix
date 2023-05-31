@@ -10,6 +10,7 @@ export default defineConfig([
       "vite",
       "express",
       "@remix-run/react",
+      "@remix-run/dev",
       "esbuild",
       "crypto",
       "fs",
