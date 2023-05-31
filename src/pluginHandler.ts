@@ -2,9 +2,9 @@ import { ResolvedConfig } from "vite";
 import { createManifestInjectSource } from "./plugin/createManifestSource";
 import { createServerBuildSource } from "./plugin/createServerBuildSource";
 import {
-  attachRuntimeSource,
-  buildRuntimeSource,
-} from "./plugin/attachRuntimeSource";
+  createRuntimeSource,
+  createPartialBuildRuntimeSource,
+} from "./plugin/createRuntimeSource";
 import { slashFindEntry } from "./plugin/util";
 
 export interface FutureConfig {
@@ -108,8 +108,8 @@ export const assertPluginHandler = (
     loadId: {
       "@remix-vite/serverBuild.jsx": createServerBuildSource,
       "@remix-vite/manifestInject.jsx": createManifestInjectSource,
-      "@remix-vite/ui.jsx": attachRuntimeSource,
-      "@remix-vite:": buildRuntimeSource,
+      "@remix-vite/ui.jsx": createRuntimeSource,
+      "@remix-vite:": createPartialBuildRuntimeSource,
     },
     config,
   };

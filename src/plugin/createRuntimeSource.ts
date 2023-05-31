@@ -9,7 +9,7 @@ import {
   slashJoinName,
 } from "./util";
 
-export const attachRuntimeSource: LoadFunction = (context) => {
+export const createRuntimeSource: LoadFunction = (context) => {
   const {
     config: { dirname },
     viteConfig: { base },
@@ -21,7 +21,9 @@ export const attachRuntimeSource: LoadFunction = (context) => {
   return code;
 };
 
-export const buildRuntimeSource: LoadFunction = async (context) => {
+export const createPartialBuildRuntimeSource: LoadFunction = async (
+  context
+) => {
   const {
     id,
     // config: { dirname },
