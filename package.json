@@ -6,11 +6,16 @@
   "keywords": [
     "vite",
     "remix",
-    "remix-run"
+    "remix-run",
+    "ssr",
+    "react",
+    "react-router",
+    "remix-dev"
   ],
   "files": [
     "dist",
     "client.d.ts",
+    "release.txt",
     "LICENSE"
   ],
   "license": "MIT",

@@ -1,0 +1,6 @@
+version, descripcion
+0.1.1, First release for testing in real projects
+0.1.2, Fix Bugs, Use the remix routes library (*)
+        - prevent full-reload page when chage the file
+        - prevent response default componente by routeId
+        - It is necesary because the remix split the JSX componente server/client
