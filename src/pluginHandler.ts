@@ -1,8 +1,11 @@
 import { ResolvedConfig } from "vite";
-import { createManifestInjectSource } from "./createManifestSource";
-import { createServerBuildSource } from "./createServerBuildSource";
-import { attachRuntimeSource } from "./attachRuntimeSource";
-import { slashFindEntry } from "./util";
+import { createManifestInjectSource } from "./plugin/createManifestSource";
+import { createServerBuildSource } from "./plugin/createServerBuildSource";
+import {
+  attachRuntimeSource,
+  buildRuntimeSource,
+} from "./plugin/attachRuntimeSource";
+import { slashFindEntry } from "./plugin/util";
 
 export interface FutureConfig {
   unstable_dev: boolean;
@@ -29,13 +32,32 @@ export type UserConfig = {
   future?: Partial<FutureConfig>;
 };
 
+export type ConfigRoute = {
+  id: string;
+  parentId: string;
+  path: string;
+  file: string;
+  module: string;
+  index?: boolean;
+  hasAction?: boolean;
+  hasLoader?: boolean;
+  caseSensitive?: boolean;
+  hasCatchBoundary?: boolean;
+  hasErrorBoundary?: boolean;
+};
+
+export type RouteMap = {
+  [routeId: string]: ConfigRoute;
+};
+
 export type LoadContext = {
   id: string;
   config: PluginConfig;
   viteConfig: ResolvedConfig;
+  routeMap: RouteMap;
 };
 
-export type LoadFunction = (context: LoadContext) => string;
+export type LoadFunction = (context: LoadContext) => Promise<string> | string;
 
 export type PluginHandler = {
   resolveId: {
@@ -55,21 +77,6 @@ const defaultFuture: FutureConfig = {
   v2_meta: false,
   v2_normalizeFormMethod: false,
   v2_routeConvention: false,
-};
-
-const copyright = (fn: LoadFunction): LoadFunction => {
-  return (context) => {
-    const code = fn(context);
-    return `
-/**
- * 
- * Willyams Yujra <yracnet@gmail.com>
- * Profile: https://www.linkedin.com/in/willyams-yujra-70155451/
- * 
- */
-${code}
-    `;
-  };
 };
 
 export const assertPluginHandler = (
@@ -99,9 +106,10 @@ export const assertPluginHandler = (
       "@remix-vite/ui": "@remix-vite/ui.jsx",
     },
     loadId: {
-      "@remix-vite/serverBuild.jsx": copyright(createServerBuildSource),
-      "@remix-vite/manifestInject.jsx": copyright(createManifestInjectSource),
-      "@remix-vite/ui.jsx": copyright(attachRuntimeSource),
+      "@remix-vite/serverBuild.jsx": createServerBuildSource,
+      "@remix-vite/manifestInject.jsx": createManifestInjectSource,
+      "@remix-vite/ui.jsx": attachRuntimeSource,
+      "@remix-vite:": buildRuntimeSource,
     },
     config,
   };

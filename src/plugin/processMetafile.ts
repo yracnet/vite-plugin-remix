@@ -10,7 +10,7 @@ const generateMD5 = (filePath: string) => {
   return hash;
 };
 
-export const getMetafile = (filePath: string) => {
+export const createMetafile = (filePath: string) => {
   try {
     let md5 = generateMD5(filePath);
     let cache = CACHE[filePath] || { md5: "0", exports: {} };
@@ -37,7 +37,6 @@ export const getMetafile = (filePath: string) => {
       map[name] = true;
       return map;
     }, {});
-    // console.log("getMetafile:", filePath, cache.exports);
     return cache.exports;
   } catch (error) {
     console.log("Error on getMetafile:", error, filePath);

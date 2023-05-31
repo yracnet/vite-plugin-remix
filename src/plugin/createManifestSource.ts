@@ -1,37 +1,28 @@
-import { LoadContext, LoadFunction } from "./assertPluginHandler.ts";
-import { getMetafile } from "./getMetafile.ts";
-import { getConfigRouteList } from "./pages.ts";
+import { LoadContext, LoadFunction } from "../pluginHandler.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
-const getManifestRoutes = (context: LoadContext) => {
-  const routeList = getConfigRouteList(context, "ManifestInject").map((it) => {
-    let exports = getMetafile("." + it.file);
-    return {
-      id: it.id,
-      parentId: it.parentId,
-      path: it.path,
-      module: it.module,
-      index: it.index,
-      caseSensitive: it.caseSensitive,
-      hasAction: !!exports.action,
-      hasLoader: !!exports.loader,
-      hasCatchBoundary: !!exports.catchBoundary,
-      hasErrorBoundary: !!exports.errorBoundary,
-    };
-  });
-  let routes = routeList.reduce((map: any, it) => {
-    map[it.id] = it;
-    return map;
-  }, {});
-  return routes;
-};
-
-export const createManifestJson: LoadFunction = (context) => {
+const createManifestJson = (context: LoadContext) => {
   const {
     config,
     viteConfig: { base },
   } = context;
-  const manifestRoutes = getManifestRoutes(context);
+  const routeList = Object.values(context.routeMap);
+  const manifestRoutes = routeList.reduce((map: any, it) => {
+    map[it.id] = {
+      id: it.id,
+      parentId: it.parentId,
+      path: it.path,
+      module: it.module,
+      //module: "@remix-vite:" + it.id,
+      index: it.index,
+      caseSensitive: it.caseSensitive,
+      hasAction: it.hasAction,
+      hasLoader: it.hasLoader,
+      hasCatchBoundary: it.hasCatchBoundary,
+      hasErrorBoundary: it.hasErrorBoundary,
+    };
+    return map;
+  }, {});
   const manifest = {
     entry: {
       module: slashJoinAbsolute(base, config.entryClient),
@@ -44,7 +35,7 @@ export const createManifestJson: LoadFunction = (context) => {
   return JSON.stringify(manifest, null, 2);
 };
 
-export const createManifestInjectSource: LoadFunction = (context) => {
+export const createManifestInjectSource: LoadFunction = async (context) => {
   const manifest = createManifestJson(context);
   console.log("Reload ManifestInject");
   return `

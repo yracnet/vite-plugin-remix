@@ -1,6 +1,7 @@
 //@ts-ignore
 import { Plugin, ResolvedConfig } from "vite";
-import { UserConfig, assertPluginHandler } from "./plugin/assertPluginHandler";
+import { RouteMap, UserConfig, assertPluginHandler } from "./pluginHandler";
+import { getRouteMap } from "./plugin/processPages";
 
 export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
   const { resolveId, loadId, config } = assertPluginHandler(
@@ -8,6 +9,7 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
     __dirname
   );
   let viteConfig: ResolvedConfig;
+  let routeMap: RouteMap = {};
   return {
     name: "plugin-remix",
     enforce: "pre",
@@ -16,44 +18,60 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
         appType: "custom",
       };
     },
-    configResolved: async (config) => {
-      viteConfig = config;
+    configResolved: async (_config) => {
+      viteConfig = _config;
+      routeMap = getRouteMap(
+        {
+          id: "all",
+          config,
+          viteConfig,
+          routeMap: routeMap,
+        },
+        "Init Project"
+      );
+      console.log("configResolved:", Object.keys(routeMap));
+    },
+    handleHotUpdate: (data) => {
+      const { file } = data;
+      routeMap = getRouteMap(
+        {
+          id: file,
+          config,
+          viteConfig,
+          routeMap: routeMap,
+        },
+        "Change Files"
+      );
+      console.log("handleHotUpdate:", Object.keys(routeMap));
     },
     resolveId: (id) => {
+      if (id.startsWith("@remix-vite:")) {
+        const [_, routeId] = id.split(":");
+        const route = routeMap[routeId];
+        //return "@remix-vite:" + route.file;
+        return route.file;
+      }
       return resolveId[id];
     },
     load: (id) => {
+      if (id.startsWith("@remix-vite:")) {
+        return loadId["@remix-vite:"]?.({
+          id,
+          config,
+          viteConfig,
+          routeMap: routeMap,
+        });
+      }
       return loadId[id]?.({
         id,
         config,
         viteConfig,
+        routeMap: routeMap,
       });
     },
     configureServer: async (devServer) => {
-      // TODO: Reload ManifestInject  when change routes directory
-      // PREVENT ERROR on the client!
-      // devServer.watcher.on("all", (event, path) => {
-      //   let module = devServer.moduleGraph.getModuleById(
-      //     "@remix-vite/manifestInject.jsx"
-      //   );
-      //   if (module) {
-      //     devServer.moduleGraph.invalidateModule(module);
-      //     devServer.reloadModule(module);
-      //   }
-      // });
-      // devServer.ws.on("vite:invalidate", async (data) => {
-      //   let module = devServer.moduleGraph.getModuleById(
-      //     "@remix-vite/manifestInject.jsx"
-      //   );
-      //   if (module) {
-      //     devServer.moduleGraph.invalidateModule(module);
-      //     devServer.reloadModule(module);
-      //   }
-      // });
       return async () => {
         devServer.middlewares.use(async (req, res, next) => {
-          // console.log("USE>>>", req.url);
-          // writeSourceCode("../temp.json", devServer.moduleGraph);
           try {
             const module = await devServer.ssrLoadModule(config.handler);
             module.handler(req, res, next);

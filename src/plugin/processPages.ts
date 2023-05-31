@@ -1,6 +1,6 @@
 import fg from "fast-glob";
-import { LoadContext } from "./assertPluginHandler";
-import { getMetafile } from "./getMetafile.ts";
+import { ConfigRoute, LoadContext, RouteMap } from "../pluginHandler.ts";
+import { createMetafile } from "./processMetafile.ts";
 import {
   assertIdFile,
   slashJoin,
@@ -10,20 +10,6 @@ import {
 
 // import { flatRoutes } from "@remix-run/dev/dist/config/flat-routes.js";
 // import { defineConventionalRoutes } from "@remix-run/dev/dist/config/routesConvention.js";
-
-export type ConfigRoute = {
-  id: string;
-  parentId: string;
-  path: string;
-  file: string;
-  module: string;
-  index?: boolean;
-  hasAction?: boolean;
-  hasLoader?: boolean;
-  caseSensitive?: boolean;
-  hasCatchBoundary?: boolean;
-  hasErrorBoundary?: boolean;
-};
 
 // TODO: Error when reference to @remix-run/dev/..,this cause "all-reload" on the client
 
@@ -75,7 +61,7 @@ export type ConfigRoute = {
 //   return routeList;
 // };
 
-export const getConfigRouteList = (
+export const getRouteList = (
   context: LoadContext,
   name: string
 ): ConfigRoute[] => {
@@ -122,7 +108,7 @@ export const getConfigRouteList = (
     },
     ...routeList1,
   ].map((it) => {
-    let exports: any = getMetafile("." + it.file);
+    let exports: any = createMetafile("." + it.file);
     return {
       id: it.id,
       parentId: it.parentId,
@@ -138,4 +124,12 @@ export const getConfigRouteList = (
   });
   console.log("getConfigRouteList:", name);
   return routeList;
+};
+
+export const getRouteMap = (context: LoadContext, name: string): RouteMap => {
+  let list = getRouteList(context, name);
+  return list.reduce((map: RouteMap, it) => {
+    map[it.id] = it;
+    return map;
+  }, {});
 };

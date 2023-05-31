@@ -1,6 +1,4 @@
-import { LoadFunction } from "./assertPluginHandler";
-import { getMetafile } from "./getMetafile";
-import { getConfigRouteList } from "./pages.ts";
+import { LoadFunction } from "../pluginHandler.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 export const createServerBuildSource: LoadFunction = (context) => {
@@ -9,10 +7,8 @@ export const createServerBuildSource: LoadFunction = (context) => {
     viteConfig: { base },
   } = context;
 
-  const routeList = getConfigRouteList(context, "ServerBuild");
-
+  const routeList = Object.values(context.routeMap);
   const manifestRoutes = routeList.reduce((map: any, it) => {
-    let exports = getMetafile("." + it.file);
     map[it.id] = {
       id: it.id,
       parentId: it.parentId,
@@ -20,10 +16,10 @@ export const createServerBuildSource: LoadFunction = (context) => {
       module: it.module,
       index: it.index,
       caseSensitive: it.caseSensitive,
-      hasAction: !!exports.action,
-      hasLoader: !!exports.loader,
-      hasCatchBoundary: !!exports.catchBoundary,
-      hasErrorBoundary: !!exports.errorBoundary,
+      hasAction: it.hasAction,
+      hasLoader: it.hasLoader,
+      hasCatchBoundary: it.hasCatchBoundary,
+      hasErrorBoundary: it.hasErrorBoundary,
     };
     return map;
   }, {});
