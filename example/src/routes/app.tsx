@@ -1,12 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
-export const links = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
-    },
-  ];
-};
+// export const links = () => {
+//   return [
+//     {
+//       rel: "stylesheet",
+//       href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
+//     },
+//   ];
+// };
 
 const AppLayout = () => {
   return (
@@ -21,7 +21,7 @@ const AppLayout = () => {
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="./about">
-              About
+              About+
             </Link>
           </li>
           <li className="nav-item">

@@ -1,3 +1,10 @@
+// export const loader = () => {
+//   console.log("ChatPage Loader");
+//   return {
+//     name: "ChatPage Loadercccf",
+//   };
+// };
+
 const ChatPage = () => {
   return (
     <div>
@@ -21,10 +28,3 @@ const ChatPage = () => {
   );
 };
 export default ChatPage;
-
-export const loader = () => {
-  console.log("ChatPage Loader");
-  return {
-    name: "ChatPage Loadercccf",
-  };
-};

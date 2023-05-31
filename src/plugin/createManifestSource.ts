@@ -1,4 +1,4 @@
-import { LoadContext, LoadFunction } from "../pluginHandler.ts";
+import { LoadContext, LoadFunction } from "./processPluginHandler.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 const createManifestJson = (context: LoadContext) => {
@@ -13,7 +13,6 @@ const createManifestJson = (context: LoadContext) => {
       parentId: it.parentId,
       path: it.path,
       module: it.module,
-      //module: "@remix-vite:" + it.id,
       index: it.index,
       caseSensitive: it.caseSensitive,
       hasAction: it.hasAction,

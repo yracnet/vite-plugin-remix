@@ -1,4 +1,4 @@
-import { LoadFunction } from "../pluginHandler.ts";
+import { LoadFunction } from "./processPluginHandler.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 export const createServerBuildSource: LoadFunction = (context) => {

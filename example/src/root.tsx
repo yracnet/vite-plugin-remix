@@ -10,6 +10,40 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+// export const CatchBoundary = () => {
+//   const caught = useCatch();
+//   return (
+//     <html>
+//       <head>
+//         <title>Oops!</title>
+//         <Meta />
+//         <Links />
+//       </head>
+//       <body>
+//         <h1>
+//           {caught.status} {caught.statusText}
+//         </h1>
+//         <p>{caught.data}</p>
+//         <Scripts />
+//       </body>
+//     </html>
+//   );
+// }
+
+// export const links: LinksFunction = () => {
+//   return [
+//     {
+//       rel: "icon",
+//       href: "/favicon.ico",
+//       type: "image/ico",
+//     },
+//     {
+//       rel: "stylesheet",
+//       href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
+//     },
+//   ];
+// };
+
 const Root = () => {
   return (
     <html lang="en">
@@ -30,37 +64,3 @@ const Root = () => {
   );
 };
 export default Root;
-
-export function CatchBoundary() {
-  const caught = useCatch();
-  return (
-    <html>
-      <head>
-        <title>Oops!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <h1>
-          {caught.status} {caught.statusText}
-        </h1>
-        <p>{caught.data}</p>
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: "icon",
-      href: "/favicon.ico",
-      type: "image/ico",
-    },
-    {
-      rel: "stylesheet",
-      href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
-    },
-  ];
-};

@@ -1,7 +1,7 @@
 // TODO: For build process we need implement:
 // import.meta.env.MODE !== "development"
 import esbuild from "esbuild";
-import { LoadFunction } from "../pluginHandler";
+import { LoadFunction } from "./processPluginHandler";
 import {
   readSourceCode,
   slashJoin,
@@ -29,8 +29,8 @@ export const createPartialBuildRuntimeSource: LoadFunction = async (
     // config: { dirname },
     viteConfig: { root },
   } = context;
-  const [_, file] = id.split(":");
-  // return `import Component from "${file}"; export default Component;`;
+  const [, file] = id.split(":");
+  //return `import Component from "${file}"; export default Component;`;
   let filePath = "." + file;
   const result = await esbuild.build({
     stdin: {

@@ -1,11 +1,11 @@
 import { ResolvedConfig } from "vite";
-import { createManifestInjectSource } from "./plugin/createManifestSource";
-import { createServerBuildSource } from "./plugin/createServerBuildSource";
+import { createManifestInjectSource } from "./createManifestSource";
+import { createServerBuildSource } from "./createServerBuildSource";
 import {
   createRuntimeSource,
   createPartialBuildRuntimeSource,
-} from "./plugin/createRuntimeSource";
-import { slashFindEntry } from "./plugin/util";
+} from "./createRuntimeSource";
+import { slashFindEntry } from "./util";
 
 export interface FutureConfig {
   unstable_dev: boolean;
@@ -37,7 +37,8 @@ export type ConfigRoute = {
   parentId: string;
   path: string;
   file: string;
-  module: string;
+  moduleServer: string;
+  moduleClient: string;
   index?: boolean;
   hasAction?: boolean;
   hasLoader?: boolean;
@@ -79,7 +80,7 @@ const defaultFuture: FutureConfig = {
   v2_routeConvention: false,
 };
 
-export const assertPluginHandler = (
+export const processPluginHandler = (
   userConfig: UserConfig,
   dirname: string
 ): PluginHandler => {

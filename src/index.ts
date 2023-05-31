@@ -1,10 +1,14 @@
 //@ts-ignore
 import { Plugin, ResolvedConfig } from "vite";
-import { RouteMap, UserConfig, assertPluginHandler } from "./pluginHandler";
+import {
+  RouteMap,
+  UserConfig,
+  processPluginHandler,
+} from "./plugin/processPluginHandler";
 import { getRouteMap } from "./plugin/processPages";
 
 export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
-  const { resolveId, loadId, config } = assertPluginHandler(
+  const { resolveId, loadId, config } = processPluginHandler(
     userConfig,
     __dirname
   );
@@ -29,7 +33,6 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
         },
         "Init Project"
       );
-      console.log("configResolved:", Object.keys(routeMap));
     },
     handleHotUpdate: (data) => {
       const { file } = data;
@@ -42,14 +45,12 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
         },
         "Change Files"
       );
-      console.log("handleHotUpdate:", Object.keys(routeMap));
     },
     resolveId: (id) => {
       if (id.startsWith("@remix-vite:")) {
-        const [_, routeId] = id.split(":");
-        const route = routeMap[routeId];
-        //return "@remix-vite:" + route.file;
-        return route.file;
+        const [, routeId] = id.split(":");
+        let route = routeMap[routeId];
+        return "@remix-vite:" + route.file;
       }
       return resolveId[id];
     },

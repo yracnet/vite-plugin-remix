@@ -1,5 +1,5 @@
 import fg from "fast-glob";
-import { ConfigRoute, LoadContext, RouteMap } from "../pluginHandler.ts";
+import { ConfigRoute, LoadContext, RouteMap } from "./processPluginHandler.ts";
 import { createMetafile } from "./processMetafile.ts";
 import {
   assertIdFile,
@@ -57,7 +57,6 @@ import {
 //     it.hasErrorBoundary = !!exports.ErrorBoundary;
 //     return it;
 //   });
-//   console.log("getConfigRouteList:", name);
 //   return routeList;
 // };
 
@@ -108,13 +107,19 @@ export const getRouteList = (
     },
     ...routeList1,
   ].map((it) => {
-    let exports: any = createMetafile("." + it.file);
+    const exports: any = createMetafile("." + it.file);
+    const moduleServer = slashJoinAbsolute(base, it.file);
+    const moduleClient = slashJoinAbsolute(
+      base,
+      "/@id/@remix-vite:" + it.id + ":default.jsx"
+    );
     return {
       id: it.id,
       parentId: it.parentId,
       path: it.path,
       file: it.file,
-      module: slashJoinAbsolute(base, it.file),
+      moduleServer,
+      moduleClient,
       caseSensitive: !!exports.caseSensitive,
       hasAction: !!exports.action,
       hasLoader: !!exports.loader,
@@ -122,7 +127,6 @@ export const getRouteList = (
       hasErrorBoundary: !!exports.ErrorBoundary,
     };
   });
-  console.log("getConfigRouteList:", name);
   return routeList;
 };
 

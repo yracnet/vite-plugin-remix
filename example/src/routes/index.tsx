@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
-export const meta = () => {
-  return [
-    { title: "Willyams Yujra" },
-    { name: "description", content: "REMIX in VITEJS" },
-  ];
-};
+// export const meta = () => {
+//   return [
+//     { title: "Willyams Yujra" },
+//     { name: "description", content: "REMIX in VITEJS" },
+//   ];
+// };
 
 export default function Index() {
   return (
