@@ -23,7 +23,6 @@ export const createServerBuildSource: LoadFunction = (context) => {
     };
     return map;
   }, {});
-  console.log("Reload ServerBuild");
   return `  
 ${routeList
   .map((it, ix) => `import * as route${ix} from "${it.file}"`)

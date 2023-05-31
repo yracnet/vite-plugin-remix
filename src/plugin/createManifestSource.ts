@@ -37,7 +37,6 @@ const createManifestJson = (context: LoadContext) => {
 
 export const createManifestInjectSource: LoadFunction = async (context) => {
   const manifest = createManifestJson(context);
-  console.log("Reload ManifestInject");
   return `
 
   export const FakeReload = ()=><div>Reload!</div>;
