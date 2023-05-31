@@ -1,22 +1,22 @@
 import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
 
-// export const meta = () => {
-//   return [
-//     { title: "ContactPage" },
-//     { name: "description", content: "REMIX in VITEJS" },
-//   ];
-// };
+export const meta = () => {
+  return [
+    { title: "ContactPage" },
+    { name: "description", content: "REMIX in VITEJS" },
+  ];
+};
 
-// export const loader = () => {
-//   console.log("ContactPage Loader", Date.now());
-//   return {};
-// };
+export const loader = () => {
+  console.log("ContactPage Loader", Date.now());
+  return {};
+};
 
 const ContactPage = () => {
   return (
     <div>
-      <h2>CONTACT12</h2>
+      <h2>CONTACT</h2>
       <ul>
         <li>
           <Link to="./">Index</Link>

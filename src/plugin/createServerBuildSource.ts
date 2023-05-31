@@ -1,4 +1,4 @@
-import { LoadFunction } from "./processPluginHandler.ts";
+import { LoadFunction } from "../pluginHandler.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 export const createServerBuildSource: LoadFunction = (context) => {
@@ -30,9 +30,9 @@ ${routeList
   .join(";\n")}
 import * as server from "${config.entryServer}";
 
-const manifestRoutes = ${JSON.stringify(manifestRoutes, null, 2)};
+export const manifestRoutes = ${JSON.stringify(manifestRoutes, null, 2)};
 
-const buildManifest = {
+export const buildManifest = {
   entry: {
     module: "${slashJoinAbsolute(base, config.entryClient)}",
     imports: [],
@@ -42,7 +42,7 @@ const buildManifest = {
   url: "${slashJoinAbsolute(base, "/@id/@remix-vite/manifestInject")}",
 };
 
-const buildRoutes = {
+export const buildRoutes = {
   ${routeList
     .map(
       (it, ix) => `"${it.id}": {
@@ -55,9 +55,9 @@ const buildRoutes = {
     .join(",\n  ")}  
 };
 
-const buildFuture = ${JSON.stringify(config.future, null, 2)};
+export const buildFuture = ${JSON.stringify(config.future, null, 2)};
 
-const buildEntry = {
+export const buildEntry = {
   module: server,
 };
 

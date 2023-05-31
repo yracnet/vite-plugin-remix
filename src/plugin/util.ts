@@ -41,6 +41,11 @@ export const slashResolveAbsolute = (pathRoot: string, pathName: string) => {
   return slashJoin("/", pathName);
 };
 
+export const slashRelativeAbsolute = (pathRoot: string, pathName: string) => {
+  pathName = path.relative(pathRoot, pathName);
+  return slashJoin("/", pathName);
+};
+
 export const assertIdFile = (...paths: string[]) => {
   return (
     slashJoin(".", ...paths)
@@ -53,6 +58,15 @@ export const assertIdFile = (...paths: string[]) => {
       .map((path) => path?.replaceAll("[", ":").replaceAll("]", ""))
       .join("/")
   );
+};
+
+export const assertModuleId = (path: string) => {
+  if (path?.startsWith("/@id/")) {
+    path = path.substring(5);
+  } else if (path?.startsWith("@id/")) {
+    path = path.substring(4);
+  }
+  return path;
 };
 
 const entryExts = [".js", ".jsx", ".ts", ".tsx"];

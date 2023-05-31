@@ -1,4 +1,4 @@
-import { LoadContext, LoadFunction } from "./processPluginHandler.ts";
+import { LoadContext, LoadFunction } from "../pluginHandler.ts";
 import { slashJoinAbsolute } from "./util.ts";
 
 const createManifestJson = (context: LoadContext) => {
@@ -22,6 +22,9 @@ const createManifestJson = (context: LoadContext) => {
     };
     return map;
   }, {});
+  let appIndex = manifestRoutes["routes/app/index"];
+  console.log(">>>", appIndex);
+
   const manifest = {
     entry: {
       module: slashJoinAbsolute(base, config.entryClient),

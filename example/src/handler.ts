@@ -1,8 +1,8 @@
-import { createRequestHandler } from "@remix-run/express";
-import express from "express";
-
 //@ts-ignore
 import { build } from "@remix-vite/serverBuild";
+
+import { createRequestHandler } from "@remix-run/express";
+import express from "express";
 
 let requestHandler = createRequestHandler({
   build,
@@ -29,5 +29,3 @@ export const run = (args: any = {}) => {
     console.log(`http://${hostname}:${port}`);
   });
 };
-
-console.log("Reload Server!!!");
