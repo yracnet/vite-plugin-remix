@@ -51,15 +51,15 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
           type: "update",
           updates: [
             {
-              acceptedPath: route.module,
-              path: route.module,
+              acceptedPath: "/@id/@remix-vite/manifestInject.jsx",
+              path: "/@id/@remix-vite/manifestInject.jsx",
               timestamp: timestamp,
               explicitImportRequired: true,
               type: "js-update",
             },
             {
-              acceptedPath: "/@id/@remix-vite/manifestInject.jsx",
-              path: "/@id/@remix-vite/manifestInject.jsx",
+              acceptedPath: route.module,
+              path: route.module,
               timestamp: timestamp,
               explicitImportRequired: true,
               type: "js-update",

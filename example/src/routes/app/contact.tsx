@@ -1,3 +1,4 @@
+import { useLoaderData } from "@remix-run/react";
 import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -9,14 +10,19 @@ export const meta = () => {
 };
 
 export const loader = () => {
-  console.log("ContactPage Loader", Date.now());
-  return {};
+  const key = Math.random();
+  console.log("ContactPage Loader", key);
+  return {
+    key,
+  };
 };
 
 const ContactPage = () => {
+  const { key } = useLoaderData();
   return (
     <div>
       <h2>CONTACT</h2>
+      <b>Key: {key}</b>
       <ul>
         <li>
           <Link to="./">Index</Link>

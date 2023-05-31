@@ -1,14 +1,19 @@
-// export const loader = () => {
-//   console.log("ChatPage Loader");
-//   return {
-//     name: "ChatPage Loadercccf",
-//   };
-// };
+import { useLoaderData } from "@remix-run/react";
+
+export const loader = () => {
+  const key = Math.random();
+  console.log("ChatPage Loader", key);
+  return {
+    key: `Random Key: ${key}`,
+  };
+};
 
 const ChatPage = () => {
+  const { key } = useLoaderData();
   return (
     <div>
       <h1>CHAT</h1>
+      <b>Key: {key}</b>
       <p>
         Eiusmod ut sint occaecat culpa ut anim nisi reprehenderit nulla ex.
         Mollit consequat laborum officia adipisicing ut amet in adipisicing

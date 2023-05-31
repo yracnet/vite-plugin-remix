@@ -22,8 +22,6 @@ const createManifestJson = (context: LoadContext) => {
     };
     return map;
   }, {});
-  let appIndex = manifestRoutes["routes/app/index"];
-  console.log(">>>", appIndex);
 
   const manifest = {
     entry: {

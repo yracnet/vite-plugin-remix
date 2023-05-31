@@ -1,23 +1,26 @@
-// export const meta = () => {
-//   return [
-//     { title: "IndexPage" },
-//     { name: "description", content: "REMIX in VITEJS" },
-//   ];
-// };
+import { useLoaderData } from "@remix-run/react";
+
+export const meta = () => {
+  return [
+    { title: "IndexPage" },
+    { name: "description", content: "REMIX in VITEJS" },
+  ];
+};
 
 export const loader = () => {
-  console.log("IndexPage Loader", Date.now());
-  return {};
+  const key = Math.random();
+  console.log("IndexPage Loader", key);
+  return {
+    key,
+  };
 };
 
 const IndexPage = () => {
+  const { key } = useLoaderData();
   return (
     <div>
       <h1>INDEX</h1>
-      <p>
-        Nostrud sint reprehenderit aliqua magna aliqua consequat pariatur quis
-        veniam et commodo mollit proident.
-      </p>
+      <b>Key: {key}</b>
       <p>
         Pariatur labore in minim eiusmod aliquip mollit minim irure. Adipisicing
         et culpa consequat amet. Labore cillum dolore laborum nulla qui amet
