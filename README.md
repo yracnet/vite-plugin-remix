@@ -10,7 +10,11 @@ RemixJS comes with a custom server, but this plugin allows you to use the Vite s
 ## Installation
 
 ```bash
-yarn add vite-plugin-remix
+yarn add -D vite-plugin-remix
+```
+
+```bash
+npm install --dev vite-plugin-remix
 ```
 
 ## Dependencies
@@ -27,12 +31,12 @@ yarn add -D @remix-run/dev @remix-run/express @remix-run/server-runtime
 In your `vite.config.ts` file:
 
 ```js
-import { defineConfig } from \"vite\";
-import { remixPlugin } from \"vite-plugin-remix\";
+import { defineConfig } from "vite";
+import { remixPlugin } from "vite-plugin-remix";
 export default defineConfig({
-    plugins: [
-      remixPlugin({
-      // appDirectory?: \"src\",
+  plugins: [
+    remixPlugin({
+      // appDirectory?: "src",
       // future: {
       //   unstable_dev?: false,
       //   unstable_postcss?: false,
@@ -52,25 +56,25 @@ export default defineConfig({
 This plugin requires a request handler. Create a `handler.ts` file in `${appDirectory}` (e.g., `src/handler.ts`):
 
 ```js
-import { createRequestHandler } from \"@remix-run/express\";
-import express from \"express\";
+import { createRequestHandler } from "@remix-run/express";
+import express from "express";
 // Custom File from vite-plugin-remix
-import { build } from \"@remix-vite/serverBuild\";
+import { build } from "@remix-vite/serverBuild";
 let requestHandler = createRequestHandler({
-    build,
-  mode: \"production\",
+  build,
+  mode: "production",
 });
 export const handler = express();
 const onRender = async (req, res, next) => {
-    try {
-      // This FIX is for supporting the base path deployment on the server
+  try {
+    // This FIX is for supporting the base path deployment on the server
     req.url = req.originalUrl;
     await requestHandler(req, res, next);
   } catch (error) {
-      next(error);
+    next(error);
   }
 };
-handler.get(\"*\", onRender);
+handler.get("*", onRender);
 // TODO: export const run = ()=>{ /*custom server for production*/}
 ```
 
@@ -79,21 +83,21 @@ handler.get(\"*\", onRender);
 In your `root.tsx` file (e.g., `src/root.tsx`), you need to use the `LiveReload` component from `@remix-vite/ui`:
 
 ```js
-import { LiveReload, Welcome } from \"@remix-vite/ui\";
+import { LiveReload, Welcome } from "@remix-vite/ui";
 import {
-    useCatch,
+  useCatch,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from \"@remix-run/react\";
+} from "@remix-run/react";
 const Root = () => {
-    return (
-      <html lang=\"en\">
+  return (
+    <html lang="en">
       <head>
-        <meta charSet=\"utf-8\" />
-        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <LiveReload /> {/* Placed at the top of the page */}
         <Meta />
         <Links />
@@ -120,4 +124,9 @@ yarn run dev
 
 ## Example
 
-Check out the example project in the \"example\" folder.
+Check out the example project in the "example" folder.
+
+## TO DO
+
+- Build Project with Plugin
+- Optimize Source Code
