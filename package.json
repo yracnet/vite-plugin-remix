@@ -1,16 +1,20 @@
 {
   "name": "vite-plugin-remix",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
-  "description": "Support RemixJS Framework in ViteServer",
+  "description": "A Vite plugin for integrating the Remix framework while maintaining Vite's functionalities.",
   "keywords": [
     "vite",
+    "vite-plugin",
     "remix",
     "remix-run",
+    "remix-framework",
     "ssr",
     "react",
     "react-router",
-    "remix-dev"
+    "remix-dev",
+    "integration",
+    "web-development"
   ],
   "files": [
     "dist",

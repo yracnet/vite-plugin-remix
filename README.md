@@ -1,12 +1,13 @@
 # vite-plugin-remix
 
-Welcome Remix to ViteJS
+Welcome Remix to ViteJS!
 
 ## Motivation
 
-- I will tried to use Remix Framework on ViteJS environemt
+I wanted to use the Remix Framework within the ViteJS environment, while keeping the web module imports and HRM (Hot Module Replacement) functionalities.
+RemixJS comes with a custom server, but this plugin allows you to use the Vite server during development.
 
-## Install
+## Installation
 
 ```bash
 yarn add vite-plugin-remix
@@ -14,25 +15,24 @@ yarn add vite-plugin-remix
 
 ## Dependencies
 
-This plugin require some dependencies for run OK
+This plugin requires some dependencies to work properly:
 
 ```bash
 yarn add @remix-run/react
-yarn add -D  @remix-run/dev @remix-run/express @remix-run/server-runtime
+yarn add -D @remix-run/dev @remix-run/express @remix-run/server-runtime
 ```
 
-### Configure
+### Configuration
 
-In [vite.config.ts](./example/vite.config.ts)
+In your `vite.config.ts` file:
 
 ```js
-import { defineConfig } from "vite";
-import { remixPlugin } from "vite-plugin-remix";
-
+import { defineConfig } from \"vite\";
+import { remixPlugin } from \"vite-plugin-remix\";
 export default defineConfig({
-  plugins: [
-    remixPlugin({
-      // appDirectory?: "src",
+    plugins: [
+      remixPlugin({
+      // appDirectory?: \"src\",
       // future: {
       //   unstable_dev?: false,
       //   unstable_postcss?: false,
@@ -47,58 +47,54 @@ export default defineConfig({
 });
 ```
 
-### Configure Handler Request
+### Configure Request Handler
 
-This pugin require a handler request, In ${appDirectory}/[handler.ts](./example/src/handler.ts)
+This plugin requires a request handler. Create a `handler.ts` file in `${appDirectory}` (e.g., `src/handler.ts`):
 
 ```js
-import { createRequestHandler } from "@remix-run/express";
-import express from "express";
+import { createRequestHandler } from \"@remix-run/express\";
+import express from \"express\";
 // Custom File from vite-plugin-remix
-import { build } from "@remix-vite/serverBuild";
-
+import { build } from \"@remix-vite/serverBuild\";
 let requestHandler = createRequestHandler({
-  build,
-  mode: "production",
+    build,
+  mode: \"production\",
 });
-
 export const handler = express();
 const onRender = async (req, res, next) => {
-  try {
-    // This FIX is for support the base path deploy on server
+    try {
+      // This FIX is for supporting the base path deployment on the server
     req.url = req.originalUrl;
     await requestHandler(req, res, next);
   } catch (error) {
-    next(error);
+      next(error);
   }
 };
-handler.get("*", onRender);
-
+handler.get(\"*\", onRender);
 // TODO: export const run = ()=>{ /*custom server for production*/}
 ```
 
 ### Configure LiveReload
 
-In [root.tsx](./example/src/root.tsx) we need use the "LiveReload" component from "@remix-vite/ui"
+In your `root.tsx` file (e.g., `src/root.tsx`), you need to use the `LiveReload` component from `@remix-vite/ui`:
 
 ```js
-import { LiveReload, Welcome } from "@remix-vite/ui";
+import { LiveReload, Welcome } from \"@remix-vite/ui\";
 import {
-  useCatch,
+    useCatch,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
-
+} from \"@remix-run/react\";
 const Root = () => {
-  return (
-    <html lang="en">
+    return (
+      <html lang=\"en\">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <LiveReload /> {/* TOP page*/}
+        <meta charSet=\"utf-8\" />
+        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />
+        <LiveReload /> {/* Placed at the top of the page */}
         <Meta />
         <Links />
       </head>
@@ -116,7 +112,7 @@ export default Root;
 
 ## Run
 
-Use the vite-flow for run the app
+To run the app, use the Vite flow:
 
 ```bash
 yarn run dev
@@ -124,4 +120,4 @@ yarn run dev
 
 ## Example
 
-See th example project in "example" folder.
+Check out the example project in the \"example\" folder.
