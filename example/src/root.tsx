@@ -30,19 +30,19 @@ import {
 //   );
 // }
 
-// export const links: LinksFunction = () => {
-//   return [
-//     {
-//       rel: "icon",
-//       href: "/favicon.ico",
-//       type: "image/ico",
-//     },
-//     {
-//       rel: "stylesheet",
-//       href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
-//     },
-//   ];
-// };
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "icon",
+      href: "/favicon.ico",
+      type: "image/ico",
+    },
+    {
+      rel: "stylesheet",
+      href: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
+    },
+  ];
+};
 
 const Root = () => {
   return (

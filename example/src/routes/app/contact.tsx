@@ -1,6 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
+import { getProduct } from "../../api/client";
 
 export const meta = () => {
   return [
@@ -9,11 +10,11 @@ export const meta = () => {
   ];
 };
 
-export const loader = () => {
-  const key = Math.random();
+export const loader = async () => {
+  const key = await getProduct();
   console.log("ContactPage Loader", key);
   return {
-    key,
+    key: JSON.stringify(key, null, 2),
   };
 };
 
@@ -22,7 +23,7 @@ const ContactPage = () => {
   return (
     <div>
       <h2>CONTACT</h2>
-      <b>Key: {key}</b>
+      <pre>Key: {key}</pre>
       <ul>
         <li>
           <Link to="./">Index</Link>

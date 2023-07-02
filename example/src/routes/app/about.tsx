@@ -1,6 +1,8 @@
 import { useLoaderData } from "@remix-run/react";
 import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
+//@ts-ignore
+import { getProduct } from "@apiClient";
 
 // export const meta = () => {
 //   return [
@@ -13,11 +15,11 @@ import { Link } from "react-router-dom";
 //   return <h1>Error1</h1>;
 // };
 
-export const loader = () => {
-  const key = Math.random();
+export const loader = async () => {
+  const key = await getProduct();
   console.log("AboutPage Loader", key);
   return {
-    key,
+    key: JSON.stringify(key, null, 2),
   };
 };
 
@@ -26,7 +28,7 @@ const AboutPage = () => {
   return (
     <div>
       <h2>ABOUT</h2>
-      <b>Key: {key}</b>
+      <pre>Key: {key}</pre>
       <ul>
         <li>
           <Link to="./">Index</Link>

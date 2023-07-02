@@ -14,10 +14,7 @@ import { flatRoutes } from "@remix-run/dev/dist/config/flat-routes.js";
 import { defineConventionalRoutes } from "@remix-run/dev/dist/config/routesConvention.js";
 
 const getRouteList = (context: LoadContext, name: string): ConfigRoute[] => {
-  const {
-    config,
-    viteConfig: { base },
-  } = context;
+  const { config, viteConfig } = context;
   const routesConvention = config.future.v2_routeConvention
     ? flatRoutes
     : defineConventionalRoutes;
@@ -25,9 +22,9 @@ const getRouteList = (context: LoadContext, name: string): ConfigRoute[] => {
   const ROOT: ConfigRoute = {
     id: "root",
     parentId: "",
-    path: slashJoinName(base),
+    path: slashJoinName(viteConfig.base),
     file: config.entryRoot,
-    module: slashJoinAbsolute(base, config.entryRoot),
+    module: slashJoinAbsolute(viteConfig.base, config.entryRoot),
     index: false,
     caseSensitive: undefined,
   };
@@ -39,7 +36,11 @@ const getRouteList = (context: LoadContext, name: string): ConfigRoute[] => {
         parentId: it.parentId,
         path: it.path || "",
         file: slashJoinAbsolute(config.appDirectory, it.file),
-        module: slashJoinAbsolute(base, config.appDirectory, it.file),
+        module: slashJoinAbsolute(
+          viteConfig.base,
+          config.appDirectory,
+          it.file
+        ),
         index: it.index,
         caseSensitive: it.caseSensitive,
       };
@@ -47,7 +48,7 @@ const getRouteList = (context: LoadContext, name: string): ConfigRoute[] => {
   );
   routeList = [ROOT, ...routeList].map((it) => {
     it.module = slashJoinAbsolute(
-      base,
+      viteConfig.base,
       "/@id/@remix-vite:" + it.id + ":default.jsx"
     );
     let exports = getMetafile("." + it.file);

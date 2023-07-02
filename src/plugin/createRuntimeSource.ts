@@ -2,12 +2,19 @@
 // import.meta.env.MODE !== "development"
 import esbuild from "esbuild";
 import { LoadFunction } from "../pluginHandler";
-import {
-  readSourceCode,
-  slashJoin,
-  slashJoinAbsolute,
-  slashJoinName,
-} from "./util";
+import path from "path";
+import fs from "fs";
+import { readSourceCode, slashJoin, slashJoinAbsolute } from "./util";
+
+const isLocalImport = (file: string) => {
+  return (
+    fs.existsSync(file) ||
+    fs.existsSync(file + ".js") ||
+    fs.existsSync(file + ".jsx") ||
+    fs.existsSync(file + ".ts") ||
+    fs.existsSync(file + ".tsx")
+  );
+};
 
 export const createRuntimeSource: LoadFunction = (context) => {
   const {
@@ -24,22 +31,19 @@ export const createRuntimeSource: LoadFunction = (context) => {
 export const createPartialBuildRuntimeSource: LoadFunction = async (
   context
 ) => {
-  const {
-    id,
-    viteConfig: { root },
-    routeMap,
-  } = context;
+  const { id, viteConfig, routeMap } = context;
   const [, routeId] = id.split(":");
   let route = routeMap[routeId];
   if (!route) {
-    return "const HackMe = () => <p>Not please</p>";
+    return "const DontHackMe = () => <p>Don't hack me, please</p>; export default DontHackMe;";
   }
 
-  let filePath = "." + route.file;
+  const importName = `.${route.file}`;
+
   const result = await esbuild.build({
     stdin: {
-      contents: `import Component from "${filePath}"; export default Component;`,
-      resolveDir: root,
+      contents: `import Component from "${importName}"; export default Component;`,
+      resolveDir: viteConfig.root,
     },
     write: false,
     bundle: true,
@@ -50,7 +54,12 @@ export const createPartialBuildRuntimeSource: LoadFunction = async (
         name: "custom-resolver",
         setup(build) {
           build.onResolve({ filter: /.*/gi }, (args) => {
-            if (args.path !== filePath) {
+            if (args.path !== importName) {
+              let file = path.resolve(args.resolveDir, args.path);
+              let exist = isLocalImport(file);
+              if (exist) {
+                return { external: true, path: file };
+              }
               return { external: true };
             }
           });
