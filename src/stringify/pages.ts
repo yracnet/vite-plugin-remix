@@ -3,6 +3,26 @@ import fs from "fs";
 import path from "../slash-path";
 import { ContextPlugin } from "../types";
 
+const escapeHTML = (text: string) => {
+  return text.replace(/[&<>"'/]/g, (match) => {
+    switch (match) {
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#x27;";
+      case "/":
+        return "&#x2F;";
+      default:
+        return match;
+    }
+  });
+};
 const checkLocalImport = (path: string) => {
   return [
     "",
@@ -71,13 +91,13 @@ export const stringifyPageFile = async (
       ],
     });
   } catch (error) {
-    console.log("Error:", error);
+    error = escapeHTML("Error: " + error);
     const codeOut = `
-const Error = () => {
+const Error = () => { 
   return (
     <code>
       <p>Don't hack me, ${file}</p>
-      <pre>Error: ${error}</pre>
+      <pre>${error}</pre>
     </code>
   )
 };

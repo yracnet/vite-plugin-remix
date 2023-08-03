@@ -4,6 +4,7 @@ version, descripcion
         - prevent full-reload page when chage the file
         - prevent response default componente by routeId
         - It is necesary because the remix split the JSX componente server/client
-0.2.0,  Change Virtual Module to Cache Files (.remix default name)
+0.2.0, Change Virtual Module to Cache Files (.remix default name)
         - performance upper
         - add name as '@remix-vite' as parameter (* posibility to use the plugin with multiple routes)
+0.2.1, Watcher add new file

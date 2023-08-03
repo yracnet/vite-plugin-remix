@@ -11,6 +11,7 @@ import { PluginConfig, RouteConvention, UserConfig } from "./types";
 
 const remixPluginImpl = (config: PluginConfig): PluginOption => {
   let routeConvention: RouteConvention = [];
+
   return {
     name: "vite-plugin-remix",
     enforce: "pre",
@@ -41,7 +42,20 @@ const remixPluginImpl = (config: PluginConfig): PluginOption => {
       await stringifyManifestInject({ config, routeConvention });
     },
     configureServer: async (devServer) => {
-      return async () => {
+      const appPath = path.join(config.root, config.appDirectory);
+      devServer.watcher.on("add", async (file) => {
+        const realFile = path.relative(appPath, file);
+        if (realFile.startsWith("routes")) {
+          routeConvention = await getRouteConvention(config);
+          await stringifyPageFile(realFile, {
+            config,
+            routeConvention,
+          });
+          await stringifyServerBuild({ config, routeConvention });
+          await stringifyManifestInject({ config, routeConvention });
+        }
+      });
+      return () => {
         devServer.middlewares.use(async (req, res, next) => {
           try {
             const handler = path.join(config.appDirectory, config.handler);
