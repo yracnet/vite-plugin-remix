@@ -20,6 +20,7 @@
     "dist",
     "client.d.ts",
     "release.txt",
+    "logo.svg",
     "LICENSE"
   ],
   "license": "MIT",
