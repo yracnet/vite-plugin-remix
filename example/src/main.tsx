@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Welcome } from "/../plugin/src/index";
+//@ts-ignore
+import { Welcome } from "@remix-vite/ui";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

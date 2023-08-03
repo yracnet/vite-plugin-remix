@@ -1,5 +1,5 @@
 import fs from "fs";
-import { Plugin } from "vite";
+import { PluginOption } from "vite";
 import { LIVE_RELOAD, SERVER_BUILD } from "./names";
 import { getRouteConvention } from "./remix/routes";
 import path from "./slash-path";
@@ -9,7 +9,7 @@ import { stringifyPageFile, stringifyPagesFiles } from "./stringify/pages";
 import { stringifyServerBuild } from "./stringify/serverBuild";
 import { PluginConfig, RouteConvention, UserConfig } from "./types";
 
-const remixPluginImpl = (config: PluginConfig): Plugin => {
+const remixPluginImpl = (config: PluginConfig): PluginOption => {
   let routeConvention: RouteConvention = [];
   return {
     name: "vite-plugin-remix",
@@ -78,7 +78,7 @@ const remixPluginImpl = (config: PluginConfig): Plugin => {
   };
 };
 
-export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
+export const remixPlugin = (userConfig: UserConfig = {}): PluginOption => {
   const {
     name = "@remix-vite",
     appDirectory = "src",

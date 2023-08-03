@@ -12,7 +12,7 @@ export const getRouteConvention = async (config: PluginConfig) => {
     : defineConventionalRoutes;
   const remixPageRoutes = Object.values(routesConvention(config.appDirectory));
   const ROOT = {
-    path: "",
+    path: config.base,
     index: false,
     caseSensitive: true,
     id: "root",

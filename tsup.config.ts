@@ -1,4 +1,3 @@
-import fse from "fs-extra";
 import { defineConfig } from "tsup";
 
 export default defineConfig([
@@ -14,15 +13,11 @@ export default defineConfig([
       "esbuild",
       "crypto",
       "fs",
-      "fast-glob",
     ],
     dts: {
       resolve: true,
     },
     clean: true,
     sourcemap: false,
-    onSuccess: async () => {
-      await fse.copy("src/runtime", "dist/runtime");
-    },
   },
 ]);

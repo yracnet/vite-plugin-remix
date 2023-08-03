@@ -8,7 +8,7 @@ const createServerBuildCode = (context: ContextPlugin) => {
   const { config, routeConvention } = context;
 
   const importRoutes = routeConvention
-    .map((it, ix) => `import   * as route${ix} from "/${it.module}"`)
+    .map((it, ix) => `import * as route${ix} from "/${it.module}"`)
     .join(";\n");
 
   const routes = routeConvention
@@ -38,7 +38,7 @@ const createServerBuildCode = (context: ContextPlugin) => {
   const modulseServer = path.join(config.appDirectory, config.entryServer);
   return `
 ${importRoutes};
-import   * as server from "/${modulseServer}";
+import * as server from "/${modulseServer}";
 
 export const build = ${JSON.stringify(buildBlock, null, 2)};
 `

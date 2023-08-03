@@ -1,9 +1,11 @@
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { defineConfig } from "vite";
-import { remixPlugin } from "./../src/index";
+//@ts-ignore
+import remixPlugin from "./../src/index.ts";
 
 export default defineConfig({
+  base: "myapp",
   resolve: {
     alias: {
       "@apiClient": path.resolve("src/api/client"),

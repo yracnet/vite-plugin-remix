@@ -39,7 +39,7 @@ export const getMetadata = (filePath: string) => {
     }, {});
     return cache.exports;
   } catch (error) {
-    console.log("Error on getMetafile:", error, filePath);
+    console.log("Error on getMetadata:", filePath, error);
     return {};
   }
 };
