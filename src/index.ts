@@ -1,100 +1,51 @@
-//@ts-ignore
-import { Plugin, ResolvedConfig } from "vite";
-import { RouteMap, UserConfig, processConfigPlugin } from "./pluginHandler";
-import { getRouteMap } from "./plugin/remixPages";
-import { slashRelativeAbsolute } from "./plugin/util";
+import fs from "fs";
+import { Plugin } from "vite";
+import { LIVE_RELOAD, SERVER_BUILD } from "./names";
+import { getRouteConvention } from "./remix/routes";
+import path from "./slash-path";
+import { stringifyLiveReload } from "./stringify/liveReload";
+import { stringifyManifestInject } from "./stringify/manifestInject";
+import { stringifyPageFile, stringifyPagesFiles } from "./stringify/pages";
+import { stringifyServerBuild } from "./stringify/serverBuild";
+import { PluginConfig, RouteConvention, UserConfig } from "./types";
 
-export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
-  const { resolveId, loadId, config } = processConfigPlugin(
-    userConfig,
-    __dirname
-  );
-  let viteConfig: ResolvedConfig;
-  let routeMap: RouteMap = {};
+const remixPluginImpl = (config: PluginConfig): Plugin => {
+  let routeConvention: RouteConvention = [];
   return {
-    name: "plugin-remix",
+    name: "vite-plugin-remix",
     enforce: "pre",
     config: () => {
       return {
         appType: "custom",
+        resolve: {
+          alias: {
+            [`${config.name}/serverBuild`]: path.resolve(
+              config.cacheDirectory,
+              SERVER_BUILD
+            ),
+            [`${config.name}/ui`]: path.resolve(
+              config.cacheDirectory,
+              LIVE_RELOAD
+            ),
+          },
+        },
       };
     },
-    configResolved: async (_config) => {
-      viteConfig = _config;
-      routeMap = getRouteMap(
-        {
-          id: "all",
-          config,
-          viteConfig,
-          routeMap: routeMap,
-        },
-        "Init Project"
-      );
-    },
-    handleHotUpdate: async (data) => {
-      let { server, file, timestamp } = data;
-      routeMap = getRouteMap(
-        {
-          id: file,
-          config,
-          viteConfig,
-          routeMap,
-        },
-        "Change Files"
-      );
-      file = slashRelativeAbsolute(viteConfig.root, file);
-      let route = Object.values(routeMap).find((it) => it.file === file);
-      if (route) {
-        server.moduleGraph.invalidateAll();
-        server.ws.send({
-          type: "update",
-          updates: [
-            {
-              acceptedPath: "/@id/@remix-vite/manifestInject.jsx",
-              path: "/@id/@remix-vite/manifestInject.jsx",
-              timestamp: timestamp,
-              explicitImportRequired: true,
-              type: "js-update",
-            },
-            {
-              acceptedPath: route.module,
-              path: route.module,
-              timestamp: timestamp,
-              explicitImportRequired: true,
-              type: "js-update",
-            },
-          ],
-        });
-        return [];
-      }
-    },
-    resolveId: (id) => {
-      if (id.startsWith("@remix-vite:")) {
-        return id;
-      }
-      return resolveId[id];
-    },
-    load: (id) => {
-      if (id.startsWith("@remix-vite:")) {
-        return loadId["@remix-vite:"]?.({
-          id,
-          config,
-          viteConfig,
-          routeMap: routeMap,
-        });
-      }
-      return loadId[id]?.({
-        id,
-        config,
-        viteConfig,
-        routeMap: routeMap,
-      });
+    configResolved: async (viteConfig) => {
+      config.root = viteConfig.root;
+      config.base = viteConfig.base;
+      routeConvention = await getRouteConvention(config);
+      await stringifyLiveReload({ config, routeConvention });
+      await stringifyPagesFiles({ config, routeConvention });
+      await stringifyServerBuild({ config, routeConvention });
+      await stringifyManifestInject({ config, routeConvention });
     },
     configureServer: async (devServer) => {
       return async () => {
         devServer.middlewares.use(async (req, res, next) => {
           try {
-            const module = await devServer.ssrLoadModule(config.handler);
+            const handler = path.join(config.appDirectory, config.handler);
+            const module = await devServer.ssrLoadModule(handler);
             module.handler(req, res, next);
           } catch (error) {
             next(error);
@@ -102,5 +53,73 @@ export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
         });
       };
     },
+    handleHotUpdate: async (data) => {
+      const { file, server, timestamp } = data;
+      const realFile = path.relative(config.appDirectory, file);
+      const pageChange = await stringifyPageFile(realFile, {
+        config,
+        routeConvention,
+      });
+      if (pageChange) {
+        server.ws.send({
+          type: "update",
+          updates: [
+            {
+              type: "js-update",
+              path: file,
+              acceptedPath: file,
+              timestamp,
+            },
+          ],
+        });
+        return [];
+      }
+    },
   };
 };
+
+export const remixPlugin = (userConfig: UserConfig = {}): Plugin => {
+  const {
+    name = "@remix-vite",
+    appDirectory = "src",
+    future = {
+      unstable_dev: false,
+      unstable_postcss: false,
+      unstable_tailwind: false,
+      v2_errorBoundary: false,
+      v2_meta: true,
+      v2_normalizeFormMethod: false,
+      v2_routeConvention: false,
+    },
+  } = userConfig;
+  const findEntry = (name: string) => {
+    return (
+      ["js", "jsx", "ts", "tsx"]
+        .map((ext) => `${name}.${ext}`)
+        .find((file) => {
+          file = path.join(appDirectory, file);
+          return fs.existsSync(file);
+        }) || name
+    );
+  };
+  const handler = findEntry("handler");
+  const entryRoot = findEntry("root");
+  const entryClient = findEntry("entry.client");
+  const entryServer = findEntry("entry.server");
+  const cacheDirectory = process.env.REMIX_CHACHE_DIR || ".remix";
+  const config: PluginConfig = {
+    name,
+    root: ".",
+    base: "/",
+    appDirectory,
+    cacheDirectory: path.join(cacheDirectory, appDirectory),
+    future,
+    handler,
+    entryRoot,
+    entryClient,
+    entryServer,
+  };
+  return remixPluginImpl(config);
+};
+
+export default remixPlugin;

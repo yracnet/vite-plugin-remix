@@ -1,41 +1,20 @@
-import { LinksFunction } from "@remix-run/server-runtime";
-//@ts-ignore
-import { LiveReload, Welcome } from "@remix-vite/ui";
 import {
-  useCatch,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-
-// export const CatchBoundary = () => {
-//   const caught = useCatch();
-//   return (
-//     <html>
-//       <head>
-//         <title>Oops!</title>
-//         <Meta />
-//         <Links />
-//       </head>
-//       <body>
-//         <h1>
-//           {caught.status} {caught.statusText}
-//         </h1>
-//         <p>{caught.data}</p>
-//         <Scripts />
-//       </body>
-//     </html>
-//   );
-// }
+import { LinksFunction } from "@remix-run/server-runtime";
+//@ts-ignore
+import { LiveReload, Welcome } from "@remix-vite/ui";
 
 export const links: LinksFunction = () => {
   return [
     {
       rel: "icon",
-      href: "/favicon.ico",
-      type: "image/ico",
+      href: "/favicon.png",
+      type: "image/png",
     },
     {
       rel: "stylesheet",

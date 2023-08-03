@@ -1,5 +1,5 @@
-import { defineConfig } from "tsup";
 import fse from "fs-extra";
+import { defineConfig } from "tsup";
 
 export default defineConfig([
   {

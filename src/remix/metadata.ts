@@ -10,7 +10,7 @@ const generateMD5 = (filePath: string) => {
   return hash;
 };
 
-export const getMetafile = (filePath: string) => {
+export const getMetadata = (filePath: string) => {
   try {
     let md5 = generateMD5(filePath);
     let cache = CACHE[filePath] || { md5: "0", exports: {} };
