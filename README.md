@@ -1,3 +1,7 @@
+---
+layout: .vscode/template.html
+---
+
 ![](logo.svg)
 
 # vite-plugin-remix
