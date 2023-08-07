@@ -1,7 +1,3 @@
----
-layout: page
----
-
 ![](logo.svg)
 
 # vite-plugin-remix
