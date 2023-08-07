@@ -6,7 +6,7 @@ import express from "express";
 
 let requestHandler = createRequestHandler({
   build,
-  mode: "production",
+  mode: "development",
 });
 
 export const handler = express();

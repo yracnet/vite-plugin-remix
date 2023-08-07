@@ -1,3 +1,5 @@
+![](logo.svg)
+
 # vite-plugin-remix
 
 Welcome Remix to ViteJS!
@@ -11,10 +13,6 @@ RemixJS comes with a custom server, but this plugin allows you to use the Vite s
 
 ```bash
 yarn add -D vite-plugin-remix
-```
-
-```bash
-npm install --dev vite-plugin-remix
 ```
 
 ## Dependencies
@@ -32,7 +30,7 @@ In your `vite.config.ts` file:
 
 ```js
 import { defineConfig } from "vite";
-import { remixPlugin } from "vite-plugin-remix";
+import remixPlugin from "vite-plugin-remix";
 export default defineConfig({
   plugins: [
     remixPlugin({
@@ -125,6 +123,10 @@ yarn run dev
 ## Example
 
 Check out the example project in the "example" folder.
+
+## Var Environemnt
+
+- REMIX_CHACHE_DIR: Defined REMIX_CHACHE_DIR for change the cache directory, default value .remix
 
 ## TO DO
 
