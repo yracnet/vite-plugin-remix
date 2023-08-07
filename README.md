@@ -1,6 +1,4 @@
----
-layout: .vscode/template.html
----
+
 
 ![](logo.svg)
 
