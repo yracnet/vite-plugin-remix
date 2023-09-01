@@ -26,3 +26,6 @@ dist-ssr
 
 srcx
 .remix
+example/.build
+example/.sanbox
+example/sanbox

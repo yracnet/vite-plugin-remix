@@ -12,6 +12,7 @@ export default defineConfig([
       "@remix-run/dev",
       "esbuild",
       "crypto",
+      "slash-path",
       "fs",
     ],
     dts: {

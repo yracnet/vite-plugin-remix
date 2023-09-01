@@ -1,6 +1,6 @@
 import esbuild from "esbuild";
 import fs from "fs";
-import path from "../slash-path";
+import path from "slash-path";
 import { ContextPlugin } from "../types";
 
 const escapeHTML = (text: string) => {

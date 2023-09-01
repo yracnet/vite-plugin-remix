@@ -2,7 +2,7 @@
 import { flatRoutes } from "@remix-run/dev/dist/config/flat-routes.js";
 //@ts-ignore
 import { defineConventionalRoutes } from "@remix-run/dev/dist/config/routesConvention.js";
-import path from "../slash-path";
+import path from "slash-path";
 import { PluginConfig, RouteConvention } from "../types";
 import { getMetadata } from "./metadata";
 

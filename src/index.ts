@@ -1,8 +1,8 @@
 import fs from "fs";
+import path from "slash-path";
 import { PluginOption } from "vite";
 import { LIVE_RELOAD, SERVER_BUILD } from "./names";
 import { getRouteConvention } from "./remix/routes";
-import path from "./slash-path";
 import { stringifyLiveReload } from "./stringify/liveReload";
 import { stringifyManifestInject } from "./stringify/manifestInject";
 import { stringifyPageFile, stringifyPagesFiles } from "./stringify/pages";
