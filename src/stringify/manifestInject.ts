@@ -1,6 +1,6 @@
 import fs from "fs";
+import path from "slash-path";
 import { MANIFEST_INJECT } from "../names";
-import path from "../slash-path";
 import { ContextPlugin } from "../types";
 
 export const createManifest = (context: ContextPlugin) => {

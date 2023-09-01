@@ -1,6 +1,6 @@
 import fs from "fs";
+import path from "slash-path";
 import { SERVER_BUILD } from "../names";
-import path from "../slash-path";
 import { ContextPlugin } from "../types";
 import { createManifest } from "./manifestInject";
 

@@ -1,6 +1,6 @@
 import fs from "fs";
+import path from "slash-path";
 import { LIVE_RELOAD } from "../names";
-import path from "../slash-path";
 import { ContextPlugin } from "../types";
 
 const createLiveReloadCode = (context: ContextPlugin) => {
