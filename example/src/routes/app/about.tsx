@@ -1,6 +1,5 @@
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Outlet } from "react-router";
-import { Link } from "react-router-dom";
 //@ts-ignore
 import { getProduct } from "@apiClient";
 

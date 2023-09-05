@@ -11,6 +11,9 @@ let requestHandler = createRequestHandler({
 
 export const handler = express();
 const onRender = async (req: any, res: any, next: any) => {
+  if (req.url.startsWith('/hi/')) {
+    return next();
+  }
   try {
     req.url = req.originalUrl;
     await requestHandler(req, res, next);
