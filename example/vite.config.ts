@@ -6,6 +6,7 @@ import remixPlugin from "./../src/index.ts";
 
 export default defineConfig({
   base: "myapp",
+  appType: "mpa",
   resolve: {
     alias: {
       "@apiClient": path.resolve("src/api/client"),

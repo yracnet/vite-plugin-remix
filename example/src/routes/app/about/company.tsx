@@ -1,5 +1,5 @@
+import { Link } from "@remix-run/react";
 import { Outlet } from "react-router";
-import { Link } from "react-router-dom";
 
 const CompanyPage = () => {
   return (

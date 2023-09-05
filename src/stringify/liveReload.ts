@@ -37,7 +37,6 @@ window.$RefreshSig$ = () => (type) => type;
       </div>
     );
   };
-  
 `;
 };
 

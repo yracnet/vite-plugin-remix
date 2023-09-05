@@ -17,7 +17,6 @@ const remixPluginImpl = (config: PluginConfig): PluginOption => {
     enforce: "pre",
     config: () => {
       return {
-        appType: "custom",
         resolve: {
           alias: {
             [`${config.name}/serverBuild`]: path.resolve(
@@ -120,7 +119,7 @@ export const remixPlugin = (userConfig: UserConfig = {}): PluginOption => {
   const entryRoot = findEntry("root");
   const entryClient = findEntry("entry.client");
   const entryServer = findEntry("entry.server");
-  const cacheDirectory = process.env.REMIX_CHACHE_DIR || ".remix";
+  const cacheDirectory = process.env.REMIX_CHACHE_DIR || "node_modules/.remix";
   const config: PluginConfig = {
     name,
     root: ".",
