@@ -1,0 +1,65 @@
+{
+  "name": "vite-plugin-remix",
+  "version": "0.2.3",
+  "type": "module",
+  "description": "A Vite plugin for integrating the Remix framework while maintaining Vite's functionalities.",
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "remix",
+    "remix-run",
+    "remix-framework",
+    "ssr",
+    "react",
+    "react-router",
+    "remix-dev",
+    "integration",
+    "web-development"
+  ],
+  "files": [
+    "dist",
+    "client.d.ts",
+    "release.txt",
+    "logo.svg",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "Willyams Yujra <yracnet@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yracnet/vite-plugin-remix"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    }
+  },
+  "homepage": "https://github.com/yracnet/vite-plugin-remix",
+  "bugs": "https://github.com/yracnet/vite-plugin-remix/issues",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "esbuild": "^0.18.17"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "@remix-run/dev": "^1.19.3",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.11.15",
+    "esbuild": "^0.18.17",
+    "express": "^4.18.2",
+    "slash-path": "^0.0.1",
+    "tsup": "^6.5.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.8"
+  }
+}
