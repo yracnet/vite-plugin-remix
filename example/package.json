@@ -1,17 +1,15 @@
 {
   "name": "example",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build"
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "vite-plugin-remix": "^0.2.3"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.19.1",
@@ -21,11 +19,10 @@
     "@types/express": "^4.17.17",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "express": "^4.18.2",
     "typescript": "^5.0.2",
-    "vite": "^4.4.8"
+    "vite": "^4.4.8",
+    "vite-plugin-remix": "^0.2.3"
   }
 }
