@@ -7,7 +7,7 @@ import { PluginConfig, RouteConvention, UserConfig } from "./plugin/types";
 export const remixPlugin = (userConfig: UserConfig = {}): PluginOption => {
   let {
     appDirectory = "src",
-    cacheDirectory = "node_modules/.remix"
+    cacheDirectory = ".remix"
   } = userConfig;
   const {
     name = "@remix-vite",

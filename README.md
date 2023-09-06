@@ -20,8 +20,7 @@ yarn add -D vite-plugin-remix
 This plugin requires some dependencies to work properly:
 
 ```bash
-yarn add @remix-run/react
-yarn add -D @remix-run/dev @remix-run/express @remix-run/server-runtime
+yarn add -D @remix-run/react @remix-run/dev @remix-run/express @remix-run/server-runtime
 ```
 
 ### Configuration
@@ -35,19 +34,25 @@ export default defineConfig({
   plugins: [
     remixPlugin({
       // appDirectory?: "src",
+      // cacheDirectory?: ".remix",
       // future: {
-      //   unstable_dev?: false,
-      //   unstable_postcss?: false,
-      //   unstable_tailwind?: false,
-      //   v2_errorBoundary?: false,
-      //   v2_meta?: false,
-      //   v2_normalizeFormMethod?: false,
-      //   v2_routeConvention?: false,
+      //    v2_dev: false,
+      //    unstable_postcss: false,
+      //    unstable_tailwind: false,
+      //    v2_errorBoundary: false,
+      //    v2_headers: false,
+      //    v2_meta: true,
+      //    v2_normalizeFormMethod: false,
+      //    v2_routeConvention: false,
       // },
     }),
   ],
 });
 ```
+
+> **Note**
+> cacheDirectory = ".remix" in the application root, allows code to be updated automatically.
+
 
 ### Configure Request Handler
 
@@ -124,9 +129,6 @@ yarn run dev
 
 Check out the example project in the "example" folder.
 
-## Var Environemnt
-
-- REMIX_CHACHE_DIR: Defined REMIX_CHACHE_DIR for change the cache directory, default value .remix
 
 ## TO DO
 
