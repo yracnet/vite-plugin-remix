@@ -1,13 +1,13 @@
 import fs from "fs";
 import path from "slash-path";
+import { ResolvedConfig } from "vite";
 import { LIVE_RELOAD } from "../names";
-import { ContextPlugin } from "../types";
+import { PluginConfig } from "../types";
 
-const createLiveReloadCode = (context: ContextPlugin) => {
-  const { config } = context;
+const createLiveReloadCode = (config: PluginConfig, vite: ResolvedConfig) => {
 
-  const urlRefresh = path.join("/", config.base, "@react-refresh");
-  const urlClient = path.join("/", config.base, "@vite/client");
+  const urlRefresh = path.join("/", vite.base, "@react-refresh");
+  const urlClient = path.join("/", vite.base, "@vite/client");
 
   return `
   export const LiveReload = () => {
@@ -40,11 +40,8 @@ window.$RefreshSig$ = () => (type) => type;
 `;
 };
 
-export const stringifyLiveReload = (context: ContextPlugin) => {
-  const liveReloadCode = createLiveReloadCode(context);
-  const { config } = context;
-  const cacheFile = path.join(config.root, config.cacheDirectory, LIVE_RELOAD);
-  const dir = path.dirname(cacheFile);
-  fs.mkdirSync(dir, { recursive: true });
+export const stringifyLiveReload = (config: PluginConfig, vite: ResolvedConfig) => {
+  const liveReloadCode = createLiveReloadCode(config, vite);
+  const cacheFile = path.join(config.cacheDirectory, LIVE_RELOAD);
   fs.writeFileSync(cacheFile, liveReloadCode, { encoding: "utf8", flag: "w" });
 };

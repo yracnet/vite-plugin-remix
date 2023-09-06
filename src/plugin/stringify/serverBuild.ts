@@ -1,11 +1,12 @@
 import fs from "fs";
 import path from "slash-path";
+import { ResolvedConfig } from "vite";
 import { SERVER_BUILD } from "../names";
-import { ContextPlugin } from "../types";
+import { PluginConfig } from "../types";
 import { createManifest } from "./manifestInject";
 
-const createServerBuildCode = (context: ContextPlugin) => {
-  const { config, routeConvention } = context;
+const createServerBuildCode = (config: PluginConfig, vite: ResolvedConfig) => {
+  const { routeConvention } = config;
 
   const importRoutes = routeConvention
     .map((it, ix) => `import * as route${ix} from "/${it.module}"`)
@@ -32,7 +33,7 @@ const createServerBuildCode = (context: ContextPlugin) => {
     },
     routes,
     future: config.future,
-    assets: createManifest(context),
+    assets: createManifest(config, vite),
     assetsBuildDirectory: "",
   };
   const modulseServer = path.join(config.appDirectory, config.entryServer);
@@ -46,9 +47,8 @@ export const build = ${JSON.stringify(buildBlock, null, 2)};
     .replace(/"__server__"/gi, "server");
 };
 
-export const stringifyServerBuild = (context: ContextPlugin) => {
-  const serverBuildCode = createServerBuildCode(context);
-  const { config } = context;
+export const stringifyServerBuild = (config: PluginConfig, vite: ResolvedConfig) => {
+  const serverBuildCode = createServerBuildCode(config, vite);
   const cacheFile = path.join(config.root, config.cacheDirectory, SERVER_BUILD);
   const dir = path.dirname(cacheFile);
   fs.mkdirSync(dir, { recursive: true });

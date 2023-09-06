@@ -1,15 +1,17 @@
 import path from "slash-path";
-import { PluginOption } from "vite";
+import { PluginOption, ResolvedConfig } from "vite";
 import { LIVE_RELOAD, SERVER_BUILD } from "./names";
 import { getRouteConvention } from "./remix/routes";
-import { stringifyLiveReload } from "./stringify/liveReload";
-import { stringifyManifestInject } from "./stringify/manifestInject";
-import { stringifyPageFile, stringifyPagesFiles } from "./stringify/pages";
-import { stringifyServerBuild } from "./stringify/serverBuild";
-import { PluginConfig, RouteConvention } from "./types";
+import { generateChange, generateStart } from "./stringify";
+import { PluginConfig } from "./types";
 
 export const remixPluginImpl = (config: PluginConfig): PluginOption => {
-  let routeConvention: RouteConvention = [];
+  // @ts-ignore
+  let vite: ResolvedConfig = {};
+  const isReload = (file: string) => {
+    file = path.slash(file);
+    return config.watcherList.find((it) => file.startsWith(it));
+  };
 
   return {
     name: "vite-plugin-remix",
@@ -31,28 +33,20 @@ export const remixPluginImpl = (config: PluginConfig): PluginOption => {
       };
     },
     configResolved: async (viteConfig) => {
-      config.root = viteConfig.root;
-      config.base = viteConfig.base;
-      routeConvention = await getRouteConvention(config);
-      await stringifyLiveReload({ config, routeConvention });
-      await stringifyPagesFiles({ config, routeConvention });
-      await stringifyServerBuild({ config, routeConvention });
-      await stringifyManifestInject({ config, routeConvention });
+      vite = viteConfig;
+      config.routeConvention = await getRouteConvention(config, vite);
+      await generateStart(config, vite);
     },
     configureServer: async (devServer) => {
-      const appPath = path.join(config.root, config.appDirectory);
-      devServer.watcher.on("add", async (file) => {
-        const realFile = path.relative(appPath, file);
-        if (realFile.startsWith("routes")) {
-          routeConvention = await getRouteConvention(config);
-          await stringifyPageFile(realFile, {
-            config,
-            routeConvention,
-          });
-          await stringifyServerBuild({ config, routeConvention });
-          await stringifyManifestInject({ config, routeConvention });
+      const onReload = async (file: string) => {
+        if (isReload(file)) {
+          config.routeConvention = await getRouteConvention(config, vite);
+          const realFile = path.relative(config.appDirectory, file);
+          await generateChange(realFile, config, vite);
         }
-      });
+      }
+      devServer.watcher.on("add", onReload);
+      devServer.watcher.on("change", onReload);
       return () => {
         devServer.middlewares.use(async (req, res, next) => {
           try {
@@ -67,12 +61,10 @@ export const remixPluginImpl = (config: PluginConfig): PluginOption => {
     },
     handleHotUpdate: async (data) => {
       const { file, server, timestamp } = data;
-      const realFile = path.relative(config.appDirectory, file);
-      const pageChange = await stringifyPageFile(realFile, {
-        config,
-        routeConvention,
-      });
-      if (pageChange) {
+      if (isReload(file)) {
+        config.routeConvention = await getRouteConvention(config, vite);
+        const realFile = path.relative(config.appDirectory, file);
+        await generateChange(realFile, config, vite);
         server.ws.send({
           type: "update",
           updates: [

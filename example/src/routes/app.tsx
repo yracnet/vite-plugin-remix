@@ -1,4 +1,5 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
+import { Menu } from "../ui/Menu";
 export const links = () => {
   return [
     {
@@ -12,25 +13,7 @@ const AppLayout = () => {
   return (
     <div className="container">
       <h1>Data Router Server Rendering Example</h1>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          <li className="nav-item">
-            <Link className="nav-link" to="./">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="./about">
-              About
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="./contact">
-              Contact
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <Menu />
       <hr />
       <Outlet />
     </div>

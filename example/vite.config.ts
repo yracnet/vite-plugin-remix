@@ -15,11 +15,13 @@ export default defineConfig({
   plugins: [
     remixPlugin({
       appDirectory: "src",
+      cacheDirectory: ".remix",
       future: {
-        unstable_dev: false,
+        v2_dev: false,
         unstable_postcss: false,
         unstable_tailwind: false,
         v2_errorBoundary: false,
+        v2_headers: false,
         v2_meta: true,
         v2_normalizeFormMethod: false,
         v2_routeConvention: false,

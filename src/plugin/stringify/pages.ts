@@ -1,7 +1,8 @@
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "slash-path";
-import { ContextPlugin } from "../types";
+import { ResolvedConfig } from "vite";
+import { PluginConfig } from "../types";
 
 const escapeHTML = (text: string) => {
   return text.replace(/[&<>"'/]/g, (match) => {
@@ -41,24 +42,23 @@ const checkLocalImport = (path: string) => {
 
 export const stringifyPageFile = async (
   file: string,
-  context: ContextPlugin
+  config: PluginConfig,
+  vite: ResolvedConfig
 ) => {
-  const { config, routeConvention } = context;
+  const { routeConvention } = config;
   const route = routeConvention.find((it) => it.file === file);
   if (!route) {
     return false;
   }
-  const cacheFile = path.join(config.root, route.moduleCache);
-  const importFile = path.join(config.root, route.module);
-  const cacheDir = path.dirname(cacheFile);
+  const { moduleCacheFile, moduleFile, moduleCacheDir } = route;
   try {
     await esbuild.build({
       stdin: {
-        sourcefile: cacheFile,
-        contents: `import   Component from "${importFile}?include=true"; export default Component;`,
+        sourcefile: moduleCacheFile,
+        contents: `import   Component from "${moduleFile}?include=true"; export default Component;`,
         resolveDir: config.root,
       },
-      outfile: cacheFile,
+      outfile: moduleCacheFile,
       jsx: "preserve",
       write: true,
       bundle: true,
@@ -79,7 +79,7 @@ export const stringifyPageFile = async (
               const resolvePath = path.join(args.resolveDir, args.path);
               let localPath = checkLocalImport(resolvePath);
               if (localPath) {
-                localPath = path.relative(cacheDir, localPath);
+                localPath = path.relative(moduleCacheDir, localPath);
               }
               return {
                 external: true,
@@ -104,14 +104,14 @@ const Error = () => {
 
 export default Error;
 `;
-    fs.writeFileSync(cacheFile, codeOut, { encoding: "utf8", flag: "w" });
+    fs.writeFileSync(moduleCacheFile, codeOut, { encoding: "utf8", flag: "w" });
   }
   return true;
 };
 
-export const stringifyPagesFiles = async (context: ContextPlugin) => {
-  const { routeConvention } = context;
+export const stringifyPagesFiles = async (config: PluginConfig, vite: ResolvedConfig) => {
+  const { routeConvention } = config;
   for (let it of routeConvention) {
-    await stringifyPageFile(it.file, context);
+    await stringifyPageFile(it.file, config, vite);
   }
 };
