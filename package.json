@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-remix",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "type": "module",
   "description": "A Vite plugin for integrating the Remix framework while maintaining Vite's functionalities.",
   "keywords": [
