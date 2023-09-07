@@ -18,6 +18,8 @@ const createServerBuildCode = (config: PluginConfig, vite: ResolvedConfig) => {
         id: it.id,
         parentId: it.parentId,
         path: it.path,
+        index: it.index,
+        caseSensitive: it.caseSensitive,
         module: `__route${ix}__`,
       };
     })

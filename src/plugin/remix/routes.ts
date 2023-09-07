@@ -7,7 +7,7 @@ import { ResolvedConfig } from "vite";
 import { PluginConfig, RouteConvention } from "../types";
 import { getMetadata } from "./metadata";
 
-export const getRouteConvention = async (config: PluginConfig, vite: ResolvedConfig) => {
+export const getRouteConvention = async (config: PluginConfig, vite: ResolvedConfig): Promise<RouteConvention> => {
   const routesConvention = config.future.v2_routeConvention
     ? flatRoutes
     : defineConventionalRoutes;
@@ -20,7 +20,6 @@ export const getRouteConvention = async (config: PluginConfig, vite: ResolvedCon
     parentId: "",
     file: config.entryRoot,
   };
-  // moduleCache
   const remixAllRoutes = [ROOT, ...remixPageRoutes];
   const result: RouteConvention = remixAllRoutes.map((route: any) => {
     route.path = route.path || "";

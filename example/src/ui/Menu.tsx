@@ -19,6 +19,11 @@ export const Menu = () => {
                         Contact
                     </Link>
                 </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="./contactError">
+                        ContactError
+                    </Link>
+                </li>
             </ul>
         </nav>
     )
