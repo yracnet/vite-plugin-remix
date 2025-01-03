@@ -1,3 +1,16 @@
+# This repository has been archived
+
+This repository has been archived and will no longer be actively maintained. The development and maintenance of the project has been moved to a new repository for better management and scalability.
+
+## Active Project
+
+The project is now located at [yracnet/vite-plugin](https://github.com/yracnet/vite-plugin) under the `packages/ssr-build` directory.
+
+Please refer to that repository for the latest version and updates.
+
+Thank you for your support and understanding.
+
+
 ![](logo.svg)
 
 # vite-plugin-remix
